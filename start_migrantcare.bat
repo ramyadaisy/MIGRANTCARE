@@ -1,4 +1,4 @@
-@echo off
+MIGRANTCARE@echo off
 echo ========================================================
 echo   Launching MIGRANTCARE (Healthcare Technology Platform)
 echo ========================================================
