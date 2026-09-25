@@ -1,0 +1,9 @@
+
+        METROPOLITAN CLINICAL LABS
+        Hemoglobin: 13.5 g/dL
+        Fasting Blood Sugar: 95 mg/dL
+        Total WBC: 6800 /cumm
+        Platelet Count: 2.2 Lakhs/cumm
+        Blood Pressure: 118/78 mmHg
+        Date: 2026-09-20
+        

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --primary-navy: #0f172a;
+  --trust-blue: #2563eb;
+  --health-teal: #0d9488;
+  --emerald-green: #10b981;
+  --emergency-red: #ef4444;
+  --surface-light: #f8fafc;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar for timeline and tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Pulse badge animation for emergency status */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
+
+.emergency-pulse {
+  animation: softPulse 2s infinite ease-in-out;
+}
