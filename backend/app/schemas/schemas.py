@@ -27,14 +27,35 @@ class UserCreate(BaseModel):
     role: str = "worker" # worker, doctor, hospital, admin
     full_name: str
     phone: str
-    home_state: Optional[str] = "Tamil Nadu"
-    current_state: Optional[str] = "Karnataka"
-    current_city: Optional[str] = "Bengaluru"
+    date_of_birth: Optional[str] = None
+    gender: Optional[str] = None
     blood_group: Optional[str] = "O+"
-    preferred_language: Optional[str] = "ta"
+    home_state: Optional[str] = None
+    home_district: Optional[str] = None
+    current_state: Optional[str] = None
+    current_city: Optional[str] = None
+    preferred_language: Optional[str] = "en"
+    
+    # Emergency & Clinical Details
+    critical_allergies: Optional[str] = None
+    chronic_conditions: Optional[str] = None
+    emergency_contact_name: Optional[str] = None
+    emergency_contact_relation: Optional[str] = None
+    emergency_contact_phone: Optional[str] = None
+    organ_donor: Optional[bool] = False
+    special_instructions: Optional[str] = None
+    
+    # Occupational Details
+    primary_industry: Optional[str] = None
+    current_workplace: Optional[str] = None
+    years_in_field: Optional[int] = 1
+    
+    # Clinician / Facility Details
     specialization: Optional[str] = None
     hospital_name: Optional[str] = None
     registration_number: Optional[str] = None
+    facility_type: Optional[str] = None
+    license_number: Optional[str] = None
 
 # Worker & Emergency Profile Schemas
 class EmergencyProfileSchema(BaseModel):
