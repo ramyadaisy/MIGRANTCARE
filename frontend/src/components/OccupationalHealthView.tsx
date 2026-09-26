@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HardHat, Factory, Tractor, Truck, Utensils, Home, ShieldCheck, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ApiService } from '../services/api';
 import { LanguageCode, translations } from '../locales/translations';
 
 interface OccupationalHealthViewProps {
@@ -10,6 +11,14 @@ export const OccupationalHealthView: React.FC<OccupationalHealthViewProps> = ({ 
   const [selectedIndustry, setSelectedIndustry] = useState<string>("Construction");
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const t = translations[language];
+
+  useEffect(() => {
+    ApiService.getWorkerProfile().then(prof => {
+      if (prof && prof.occupational_profile && prof.occupational_profile.primary_industry) {
+        setSelectedIndustry(prof.occupational_profile.primary_industry);
+      }
+    }).catch(() => {});
+  }, []);
 
   const industries = [
     { id: "Construction", name: "Construction & Civil Works", icon: HardHat, color: "text-amber-600 bg-amber-50" },

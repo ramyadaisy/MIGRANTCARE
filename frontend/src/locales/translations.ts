@@ -48,7 +48,7 @@ export const translations: Record<LanguageCode, Translations> = {
   en: {
     appName: "MIGRANTCARE",
     tagline: "A Portable Digital Health Passport for Migrant Workers",
-    greeting: "Good morning",
+    greeting: "Welcome",
     healthPassport: "Your Health Passport",
     healthId: "Health ID",
     bloodGroup: "Blood Group",

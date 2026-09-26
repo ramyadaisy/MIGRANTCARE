@@ -94,34 +94,38 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
             health_id=health_id,
             full_name=user_in.full_name,
             phone=user_in.phone,
-            home_state=user_in.home_state or "Tamil Nadu",
-            current_state=user_in.current_state or "Karnataka",
-            current_city=user_in.current_city or "Bengaluru",
+            date_of_birth=user_in.date_of_birth or "",
+            gender=user_in.gender or "Not specified",
+            home_state=user_in.home_state or "Not specified",
+            current_state=user_in.current_state or "Not specified",
+            current_city=user_in.current_city or "Not specified",
             blood_group=user_in.blood_group or "O+",
-            preferred_language=user_in.preferred_language or "ta"
+            preferred_language=user_in.preferred_language or "en"
         )
         db.add(worker)
         db.flush()
         
-        # Initialize default emergency profile
+        # Initialize emergency profile with user-provided manual values
         ep = EmergencyProfile(
             worker_id=worker.id,
-            critical_allergies="None specified",
-            chronic_conditions="None specified",
+            critical_allergies=user_in.critical_allergies or "None reported",
+            chronic_conditions=user_in.chronic_conditions or "None reported",
             blood_group=user_in.blood_group or "O+",
-            emergency_contact_name="Family Contact",
-            emergency_contact_relation="Family",
-            emergency_contact_phone=user_in.phone
+            emergency_contact_name=user_in.emergency_contact_name or "Emergency Contact",
+            emergency_contact_relation=user_in.emergency_contact_relation or "Family",
+            emergency_contact_phone=user_in.emergency_contact_phone or user_in.phone,
+            organ_donor=user_in.organ_donor if user_in.organ_donor is not None else False,
+            special_instructions=user_in.special_instructions or ""
         )
         db.add(ep)
         
-        # Initialize default occupational profile
+        # Initialize occupational profile with user-provided manual values
         op = OccupationalProfile(
             worker_id=worker.id,
-            primary_industry="Construction",
-            current_workplace=f"{user_in.current_city} Site",
-            years_in_field=2,
-            hazard_exposures='["Dust Exposure", "Physical Strain"]'
+            primary_industry=user_in.primary_industry or "General Labor",
+            current_workplace=user_in.current_workplace or f"{user_in.current_city or 'Workplace'} Site",
+            years_in_field=user_in.years_in_field or 1,
+            hazard_exposures='["Physical Strain"]'
         )
         db.add(op)
 
@@ -134,8 +138,8 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
             specialization=user_in.specialization or "General Medicine",
             registration_number=user_in.registration_number or f"REG-{random.randint(10000, 99999)}",
             hospital_name=user_in.hospital_name or "General Hospital",
-            city=user_in.current_city or "Bengaluru",
-            state=user_in.current_state or "Karnataka"
+            city=user_in.current_city or "Not specified",
+            state=user_in.current_state or "Not specified"
         )
         db.add(doctor)
 
@@ -143,10 +147,10 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         hosp = Hospital(
             user_id=user.id,
             hospital_name=user_in.hospital_name or user_in.full_name,
-            facility_type="Government District Hospital",
-            license_number=f"HOSP-{random.randint(1000, 9999)}",
-            city=user_in.current_city or "Bengaluru",
-            state=user_in.current_state or "Karnataka",
+            facility_type=user_in.facility_type or "Government District Hospital",
+            license_number=user_in.license_number or f"HOSP-{random.randint(1000, 9999)}",
+            city=user_in.current_city or "Not specified",
+            state=user_in.current_state or "Not specified",
             contact_number=user_in.phone
         )
         db.add(hosp)

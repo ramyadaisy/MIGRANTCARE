@@ -107,18 +107,32 @@ export class ApiService {
     return data;
   }
 
+  public static async updateWorkerProfile(profileData: any) {
+    const res = await this.request<any>('/worker/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData)
+    });
+    const savedUser = this.getSavedUser();
+    if (savedUser && profileData.full_name) {
+      savedUser.full_name = profileData.full_name;
+      this.setAuth(savedUser);
+    }
+    return res;
+  }
+
   public static getOfflineEmergencyProfile() {
     const raw = localStorage.getItem('migrantcare_offline_emergency');
     if (raw) return JSON.parse(raw);
+    const user = this.getSavedUser();
     return {
-      health_id: "MC-2026-001245",
-      full_name: "Arun Kumar",
+      health_id: user?.health_id || "MC-2026-000000",
+      full_name: user?.full_name || "Patient Profile",
       blood_group: "O+",
-      critical_allergies: "Severe Penicillin Allergy, Sulfa Drugs",
-      chronic_conditions: "Mild Dust-Induced Occupational Asthma",
-      emergency_contact_name: "Murugan (Brother)",
-      emergency_contact_phone: "+91 98765 43210",
-      special_instructions: "Carry Salbutamol rescue inhaler. Do NOT administer penicillin."
+      critical_allergies: "None reported",
+      chronic_conditions: "None reported",
+      emergency_contact_name: "Emergency Contact",
+      emergency_contact_phone: "+91 00000 00000",
+      special_instructions: ""
     };
   }
 

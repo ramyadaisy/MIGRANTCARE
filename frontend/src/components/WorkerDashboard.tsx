@@ -71,10 +71,9 @@ export const WorkerDashboard: React.FC<WorkerDashboardProps> = ({
   };
 
   const handleReadSchedule = () => {
-    VoiceAssistant.speak(
-      `Good morning Arun. Your Health ID is MC-2026-001245. Blood group is O positive. Next medicine is Levocetirizine at 9:00 PM tonight after dinner. Upcoming follow up consultation tomorrow at 10:00 AM at Victoria Hospital.`,
-      language
-    );
+    if (!profile) return;
+    const speech = `Health Passport summary for ${profile.full_name}. Health ID is ${profile.health_id}. Blood group is ${profile.blood_group}. Current location is ${profile.current_city}, ${profile.current_state}. Native state is ${profile.home_state}.`;
+    VoiceAssistant.speak(speech, language);
   };
 
   if (!profile) return null;
@@ -113,7 +112,9 @@ export const WorkerDashboard: React.FC<WorkerDashboardProps> = ({
               Active Migration Corridor
             </span>
             <h1 className="text-2xl font-black mt-1">
-              {t.greeting}, {profile.full_name} 👋
+              {profile.full_name && profile.full_name !== 'Arun Kumar' 
+                ? `${t.greeting}, ${profile.full_name} 👋` 
+                : `${t.greeting} 👋`}
             </h1>
             <p className="text-xs text-slate-300 mt-1 flex items-center gap-2">
               <span>Home: <strong>{profile.home_state}</strong></span>
@@ -125,14 +126,14 @@ export const WorkerDashboard: React.FC<WorkerDashboardProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={handleReadSchedule}
-              className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-teal-200 text-xs font-semibold flex items-center gap-2 border border-white/20 transition"
+              className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-teal-200 text-xs font-semibold flex items-center gap-1.5 border border-white/20 transition cursor-pointer"
             >
-              <Volume2 className="w-4 h-4" />
+              <Volume2 className="w-3.5 h-3.5" />
               Read Summary 🔊
             </button>
             <button
               onClick={() => setShowLocationModal(true)}
-              className="px-3.5 py-2 rounded-2xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition"
+              className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-teal-200 text-xs font-semibold flex items-center gap-1.5 border border-white/20 transition cursor-pointer"
             >
               Update Location 📍
             </button>

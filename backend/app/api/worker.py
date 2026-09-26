@@ -52,6 +52,44 @@ def get_worker_profile(worker: Worker = Depends(get_current_worker)):
         } if op else None
     }
 
+@router.put("/profile")
+def update_worker_profile(data: dict, worker: Worker = Depends(get_current_worker), db: Session = Depends(get_db)):
+    if "full_name" in data and data["full_name"]:
+        worker.full_name = data["full_name"].strip()
+    if "phone" in data and data["phone"]:
+        worker.phone = data["phone"].strip()
+    if "blood_group" in data and data["blood_group"]:
+        worker.blood_group = data["blood_group"]
+        if worker.emergency_profile:
+            worker.emergency_profile.blood_group = data["blood_group"]
+    if "date_of_birth" in data:
+        worker.date_of_birth = data["date_of_birth"]
+    if "gender" in data:
+        worker.gender = data["gender"]
+    if "home_state" in data and data["home_state"]:
+        worker.home_state = data["home_state"].strip()
+    if "current_state" in data and data["current_state"]:
+        worker.current_state = data["current_state"].strip()
+    if "current_city" in data and data["current_city"]:
+        worker.current_city = data["current_city"].strip()
+    if "preferred_language" in data and data["preferred_language"]:
+        worker.preferred_language = data["preferred_language"]
+
+    # Log audit event
+    audit = AccessAuditLog(
+        worker_id=worker.id,
+        actor_user_id=worker.user_id,
+        actor_role="worker",
+        actor_name=worker.full_name,
+        hospital_name="Self-Service Portal",
+        action="UPDATED_WORKER_PROFILE",
+        details=f"Updated worker profile details (Name: {worker.full_name})."
+    )
+    db.add(audit)
+    db.commit()
+    db.refresh(worker)
+    return {"message": "Profile updated successfully", "full_name": worker.full_name}
+
 @router.put("/profile/language")
 def update_preferred_language(data: dict, worker: Worker = Depends(get_current_worker), db: Session = Depends(get_db)):
     lang = data.get("language", "ta")
